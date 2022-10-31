@@ -1,21 +1,21 @@
 {% extends 'glideEz/layout.html' %} {% block head %}
 
-<title>Document</title>
+<title>View Account</title>
 <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
 <link rel="stylesheet" href="../../static/glideEz/css/view_account.css" />
 
 {% endblock %}
 
 {% block content %}
-
+<body style="background-image:url('Glide_Ez_project\glideEz\static\glideEz\images\pexels-pixabay-358220.png')">
 <!-- Page content -->
 <div class="container-fluid mt--7">
-
-  <div class="col-xl-5 order-xl-1">
+  <h1 class="head1"> View Account </h1>
+  <div class="col-xl-5 order-xl-1" >
     <div class="card bg-secondary shadow">
       <div class="card-header bg-white border-0">
         <div class="row align-items-center">
-          <div class="col-8">
+          <div class="col-8" >
             <h3 class="mb-0">My account</h3>
           </div>
           <div class="col-4 text-right">
@@ -106,9 +106,7 @@
           <h6 class="heading-small text-muted mb-4">About me</h6>
           <div class="pl-lg-4">
             <div class="form-group focused">
-              <label>About Me</label>
-              <textarea rows="4" class="form-control form-control-alternative" placeholder="A few words about you ...">
-A beautiful Dashboard for Bootstrap 4. It is Free and Open Source.</textarea>
+          
             </div>
           </div>
         </form>
@@ -118,4 +116,5 @@ A beautiful Dashboard for Bootstrap 4. It is Free and Open Source.</textarea>
 </div>
 </div>
 </div>
+</body>
 {% endblock %}
