@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<body style="background-image:url('Glide_Ez_project\glideEz\static\glideEz\images\pexels-pixabay-358220.png')">
+<body background-image:url('Glide_Ez_project\glideEz\static\glideEz\images\pexels-pixabay-358220.png')>
 <!-- Page content -->
 <div class="container-fluid mt--7">
   <h1 class="head1"> View Account </h1>
@@ -32,14 +32,30 @@
             <div class="row">
               <div class="col-lg-6">
                 <div class="form-group focused">
-                  <label class="form-control-label" for="input-username">Username</label>
-                  <input type="text" id="input-username" class="form-control form-control-alternative"
-                    placeholder="Username" value="{{ user.first_name }}" />
+                    <label class="form-control-label" for="input-first-name">First name</label>
+                  <input type="text" id="input-first-name" class="form-control form-control-alternative"
+                    placeholder="First name" value="{{ user.first_name }}" />
                 </div>
               </div>
               <div class="col-lg-6">
                 <div class="form-group">
-                  <label class="form-control-label" for="input-email">Email address</label>
+                  <label class="form-control-label" for="input-last-name">Last name</label>
+                  <input type="text" id="input-last-name" class="form-control form-control-alternative"
+                    placeholder="Last name" value="Jesse" />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="form-group focused">
+                    <label class="form-control-label" for="input-adhaar_no">Adhaar Number</label>
+                  <input type="number" id="input-adhaar_no" class="form-control form-control-alternative"
+                    placeholder="Adhaar number" value="{{ user.adhaar_no }}" />
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group focused">
+                    <label class="form-control-label" for="input-email">Email address</label>
                   <input type="email" id="input-email" class="form-control form-control-alternative"
                     placeholder="{{ user.email }}" />
                 </div>
@@ -48,16 +64,16 @@
             <div class="row">
               <div class="col-lg-6">
                 <div class="form-group focused">
-                  <label class="form-control-label" for="input-first-name">First name</label>
-                  <input type="text" id="input-first-name" class="form-control form-control-alternative"
-                    placeholder="First name" value="{{ user.first_name }}" />
+                    <label class="form-control-label" for="input-DOB">Date of Birth</label>
+                  <input type="date" id="input-date" class="form-control form-control-alternative"
+                    placeholder="DD/MM/YYYY" value="{{ user.DOB }}" />
                 </div>
               </div>
               <div class="col-lg-6">
                 <div class="form-group focused">
-                  <label class="form-control-label" for="input-last-name">Last name</label>
-                  <input type="text" id="input-last-name" class="form-control form-control-alternative"
-                    placeholder="Last name" value="Jesse" />
+                    <label class="form-control-label" for="input-user.phone_No">Phone Number</label>
+                  <input type="number" id="input-user.phone_No" class="form-control form-control-alternative"
+                    placeholder="Contact No." value="{{ user.phone_No }}" />
                 </div>
               </div>
             </div>
@@ -102,11 +118,6 @@
             </div>
           </div>
           <hr class="my-4" />
-          <!-- Description -->
-          <h6 class="heading-small text-muted mb-4">About me</h6>
-          <div class="pl-lg-4">
-            <div class="form-group focused">
-          
             </div>
           </div>
         </form>
