@@ -1,0 +1,19 @@
+.modal-content {
+    width: 400px;
+    background: white;
+    border-radius: 6px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    padding: 0 30px 30px;
+    color: #333;
+    
+    
+}
+
+.modal-content img{
+    width: 100px;
+    margin:  ;
+}
