@@ -4,7 +4,8 @@ from django.core.mail import send_mail
 from django.views.decorators.cache import cache_control # for stopping session on clicking back button
 import mysql.connector
 from datetime import datetime
-
+from django.contrib import messages #import messages
+import sweetify
 
 # Create your views here.
 def home(request): 
@@ -53,7 +54,9 @@ def register_user_view(request):
         mycursor.execute("SELECT * FROM user WHERE Email = %s", (email,))
         user = mycursor.fetchone()
         if user:
-            return HttpResponse("User already exists")
+            sweetify.error(request, 'Registration Failed', text='User Already exists', persistent='Try Again')
+            return redirect('/register_user')
+            # return redirect('register_user')
         else:
             mycursor.execute("select max(User_ID) from User;")
             id=mycursor.fetchall()
@@ -64,7 +67,8 @@ def register_user_view(request):
                 name.append('')
             mycursor.execute("INSERT INTO user (User_ID, first_name, middle_name,LAst_Name ,Email, passwrd, adhaar_no, address, DOB, phone_no) VALUES (%s,%s, %s, %s, %s, %s, %s, %s, %s, %s)", (id[0][0]+1,name[0],name[1],name[2],email, password, aadhar, address, dob, phone_number))
             mydb.commit()
-            return render(request, "glideEz/login_user.html")
+            sweetify.success(request, 'Registration Successfull', text='Your account was created successfully!', persistent='Login')
+            return redirect('/login_user')
     return render(request, "glideEz/login_user.html")
 
 def login_user_view(request):
@@ -124,7 +128,8 @@ def login_user_view(request):
 
             return render(request, "glideEz/index.html", {'user': user})
         else:
-            return HttpResponse("User not found")
+            sweetify.error(request, 'User Not Found', text='User doesn\'t exist', persistent='Try Again')
+            return redirect('/login_user')
     return render(request, "glideEz/login_user.html")
 
 def register_airline_view(request):
@@ -151,7 +156,8 @@ def register_airline_view(request):
         mycursor.execute("SELECT * FROM airline WHERE Email = %s", (email,))
         airline = mycursor.fetchone()
         if airline:
-            return HttpResponse("Airline already exists")
+            sweetify.error(request, 'Registration Failed', text='Airline Already exists', persistent='Try Again')
+            return redirect('/register_airline')
         else:
 
             # Generate unique airline id which is not present in database which starts with first two letters of airline name
@@ -166,8 +172,10 @@ def register_airline_view(request):
             
             mycursor.execute("INSERT INTO airline (Airline_ID, Airline_name, passwrd, Email, phone_no, location) VALUES (%s, %s, %s, %s, %s, %s)", (airline_id, name, password, email, phone_number, address))
             mydb.commit()
-            return render(request, "glideEz/login_airline.html")
-    return render(request, "glideEz/register_airline.html")
+            sweetify.success(request, 'Registration Successfull', text='Your account was created successfully!', persistent='Login')
+            return redirect('/login_airline')
+    return render(request, "glideEz/login_airline.html")
+    
 
 def login_airline_view(request):
     if request.method == "POST":
@@ -218,7 +226,8 @@ def login_airline_view(request):
             print(airline)
             return render(request, "glideEz/Airline_Home.html", {'airline': airline})
         else:
-            return HttpResponse("Airline not found")
+            sweetify.error(request, 'Airline Not Found', text='Airline doesn\'t exist', persistent='Try Again')
+            return redirect('/login_airline')
     return render(request, "glideEz/login_airline.html")
 
 
@@ -239,7 +248,7 @@ def logout_view(request):
         # redirect to home page
         return redirect('/')
 
-    return render(request, "glideEz/index.html")
+    return redirect('/')
 
 def view_account_view(request):
     # Get email from session
@@ -395,6 +404,9 @@ def airline_pricing_view(request):
 
 def airline_contact_view(request):
     return render(request,'glideEz/airline_contact.html')
+
+def airline_flight_view(request):
+    return render(request,'glideEz/addflight.html')
 
 
        
