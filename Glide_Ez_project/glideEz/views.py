@@ -468,6 +468,17 @@ def search_flight_view(request):
 def book_flight_view(request):
     if not request.session.has_key('email'):
         return redirect('/login_user')
+    # connect to database
+    mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="2002",
+        database="glide_ez"
+    )
+    mycursor = mydb.cursor()
+    # get first class seats from database
+    
+
     return render(request, "glideEz/book_flight.html")
 
 def airline_home_view(request):
