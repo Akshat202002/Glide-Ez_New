@@ -12,7 +12,7 @@ def home(request):
     mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="Rvya@1842",
             database="glide_ez"
         )
     mycursor = mydb.cursor()
@@ -47,7 +47,7 @@ def register_user_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="Rvya@1842",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -82,7 +82,7 @@ def login_user_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="Rvya@1842",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -125,8 +125,7 @@ def login_user_view(request):
                 'dob': dob[0]
 
             }
-
-            return render(request, "glideEz/index.html", {'user': user})
+            return redirect('/', {'user': user})
         else:
             sweetify.error(request, 'User Not Found', text='User doesn\'t exist', persistent='Try Again')
             return redirect('/login_user')
@@ -149,7 +148,7 @@ def register_airline_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="Rvya@1842",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -188,7 +187,7 @@ def login_airline_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="Rvya@1842",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -257,7 +256,7 @@ def view_account_view(request):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="2002",
+        password="Rvya@1842",
         database="glide_ez"
     )
     mycursor = mydb.cursor()
@@ -338,7 +337,7 @@ def search_flight_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="Rvya@1842",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -380,7 +379,10 @@ def search_flight_view(request):
         print(details)
         return render(request, "glideEz/search_flight.html", {'details': details , 'source' : source , 'destination' : destination , 'Class_Type' : class_type})
 
-
+def book_flight_view(request):
+    if not request.session.has_key('email'):
+        return redirect('/login_user')
+    return render(request, "glideEz/book_flight.html")
 
 def airline_home_view(request):
     return render(request,'glideEz/Airline_Home.html')
@@ -389,15 +391,16 @@ def airline_addtrip_view(request):
     mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="Rvya@1842",
             database="glide_ez"
         )
     mycursor = mydb.cursor()
     mycursor.execute('select distinct loc from Airport order by loc;')
     details=mycursor.fetchall()
-    print(details)
-    print('Hi')
-    return render(request,'glideEz/airline_addtrip.html',{'details' : details})
+    mycursor = mydb.cursor()
+    mycursor.execute('select Airport_Id,Airport_Name,loc from Airport order by loc;')
+    allairports=mycursor.fetchall()
+    return render(request,'glideEz/airline_addtrip.html',{'details' : details , 'airports' : allairports})
 
 def airline_pricing_view(request):
     return render(request,'glideEz/airline_pricing.html')
@@ -408,5 +411,74 @@ def airline_contact_view(request):
 def airline_flight_view(request):
     return render(request,'glideEz/addflight.html')
 
+def addflight_view(request):
+    if request.method == "POST":
+        Flight_ID = request.POST.get('Flight_ID')
+        Flight_Name = request.POST.get('Flight_Name')
+        First = request.POST.get('First')
+        Business = request.POST.get('Business')
+        Economy = request.POST.get('Economy')
 
-       
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Rvya@1842",
+            database="glide_ez"
+        )
+        mycursor = mydb.cursor()
+        str="""insert into Flight(Flight_ID,fk_Airline_ID,Flight_Name,First_Class,Business_Class,Economy_Class) values({},{},'{}',{},{},{})""".format(Flight_ID,3,Flight_Name,First,Business,Economy)
+        #mycursor.execute(str)
+        return redirect('/airline_addTrip')
+
+
+def forgot_password_view(request):
+    # send email to user with link to reset password with smtp
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        # send user his old password via email
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Rvya@1842",
+            database="glide_ez"
+        )
+        mycursor = mydb.cursor()
+        mycursor.execute("select passwrd from User where Email = '{}'".format(email))
+        details = mycursor.fetchall()
+        print(details)
+        if details:
+            send_mail('Your password', details[0][0], '', [email])
+            sweetify.info(request, 'Password Sent Successfully.', button='Ok', timer=3000)
+            return render(request, 'glideEz/forgot_password.html')
+        else:
+            sweetify.error(request, 'Email Not Found', text='Email doesn\'t exist', persistent='Try Again')
+            return render(request, 'glideEz/forgot_password.html', {'message': 'Email not found'})
+    return render(request, 'glideEz/forgot_password.html')
+
+
+def payment_view(request):
+    return render(request, 'glideEz/payment.html')
+
+def addtrip_view(request):
+    if request.method == "POST":
+        Flight_ID = request.POST.get('Flight_ID')
+        Source = request.POST.get('Flight_Name')
+        Destination = request.POST.get('Flight_Name')
+        Arrival=request.POST.get('Flight_Name')
+        Departure=request.POST.get('Flight_Name')
+        src_ap=request.POST.get('Flight_Name')
+        dest_ap=request.POST.get('Flight_Name')
+
+        mydb = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="Rvya@1842",
+            database="glide_ez"
+        )
+        mycursor = mydb.cursor()
+        str="""insert into Trip(Depart_Time,Arrival_Time,Trip_ID,src_ID,dest_ID,Flight_ID) values({},{},'{}',{},{},{})""".format(Arrival,Departure,Flight_Name,First,Business,Economy)
+        #mycursor.execute(str)
+        return redirect('/airline_addTrip')
+
+
+
