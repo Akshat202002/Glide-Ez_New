@@ -504,7 +504,7 @@ def payment_redirect_view(request):
         mycursor.execute(str)
         payment_id=mycursor.fetchall()
         payment_id=payment_id[0][0]
-        str = """insert into Payment Values(null,'Card', {});""".format(payment_id,total_price)
+        str = """insert into Payment Values(null,'Card', {});""".format(total_price)
         mycursor.execute(str)
         mydb.commit()
         # parse the seat list
