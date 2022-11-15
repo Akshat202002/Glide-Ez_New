@@ -539,7 +539,8 @@ def payment_redirect_view(request):
             mycursor.execute(str)
         mydb.commit()
         sweetify.success(request, 'Booking Successful', text='Booking Successful')
-        return redirect('/')
+
+        return redirect('bookings', )
 
 
 
