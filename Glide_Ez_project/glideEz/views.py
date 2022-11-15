@@ -15,7 +15,7 @@ def home(request):
     mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
     mycursor = mydb.cursor()
@@ -77,7 +77,7 @@ def register_user_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -108,7 +108,7 @@ def login_user_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -173,7 +173,7 @@ def forgot_password_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -197,7 +197,7 @@ def view_account_view(request):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="2002",
+        password="12348765",
         database="glide_ez"
     )
     mycursor = mydb.cursor()
@@ -261,7 +261,7 @@ def edit_account_details_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -284,7 +284,7 @@ def edit_account_details_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -346,7 +346,7 @@ def search_flight_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -406,7 +406,7 @@ def book_flight_view(request):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="2002",
+        password="12348765",
         database="glide_ez"
     )
     mycursor = mydb.cursor()
@@ -489,17 +489,34 @@ def payment_view(request):
 
 def payment_redirect_view(request):
     if request.method=="POST":
+        seat_list = request.POST.getlist('seat_list')
+        passengers = request.POST.get('passengers')
+        trip_id=request.POST.get('trip_ID')
+        seat_list=seat_list[0].strip('][').split(', ')
+        passengers=passengers.replace("'",'"')
+        passengers=json.loads(passengers)
+        print(passengers)
+        for i in range(len(seat_list)):
+            seat_list[i]=seat_list[i].strip("'")
         # connect to database
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         total_price=request.POST.get("price")
         print(total_price)
         mycursor = mydb.cursor()
-
+        placeholders=json.dumps(tuple([key for key in seat_list])).replace(']', ')').replace('[','(')  
+        query = 'SELECT exists(select seat_no FROM seat WHERE seat_no IN {} and trip_id={} and busy=True);'.format(placeholders,trip_id)
+        print(query)
+        mycursor.execute(query)
+        check=mycursor.fetchall()
+        check=check[0][0]
+        if check==1:
+            sweetify.error(request, 'Something Went Wrong', text='Please Try Again')
+            return redirect('/')
         str="""SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = "glide_ez" AND TABLE_NAME = "Payment";"""
         mycursor.execute(str)
         payment_id=mycursor.fetchall()
@@ -508,19 +525,10 @@ def payment_redirect_view(request):
         mycursor.execute(str)
         mydb.commit()
         # parse the seat list
-        seat_list = request.POST.getlist('seat_list')
-        passengers = request.POST.get('passengers')
-        trip_id=request.POST.get('trip_ID')
-        seat_list=seat_list[0].strip('][').split(', ')
-        passengers=passengers.replace("'",'"')
-        passengers=json.loads(passengers)
-        print(passengers)
         user_email = request.session['email']
         mycursor.execute("Select user_id from user where email='{}';".format(user_email))
         user_id=mycursor.fetchall()
         user_id=user_id[0][0]
-        for i in range(len(seat_list)):
-            seat_list[i]=seat_list[i].strip("'")
         for seat in seat_list:
             str="""update Seat set busy=true where Seat_No='{}' and trip_id={} """.format(seat,trip_id)
             mycursor.execute(str)
@@ -585,7 +593,7 @@ def register_airline_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -624,7 +632,7 @@ def login_airline_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -695,7 +703,7 @@ def airline_addflight_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -718,7 +726,7 @@ def airline_addtrip_view(request):
     mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
     mycursor = mydb.cursor()
@@ -793,7 +801,7 @@ def passenger_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
