@@ -801,7 +801,7 @@ def passenger_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="12348765",
+            password="2002",
             database="glide_ez"
         )
         mycursor = mydb.cursor()

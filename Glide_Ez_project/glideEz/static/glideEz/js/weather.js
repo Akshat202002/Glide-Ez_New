@@ -2,15 +2,15 @@
 
 const weatherApi = {
     key: "bab281d79e5f1e9755a68d754cc313e7",
-    baseUrl: "https://api.openweathermap.org/data/2.5/weather", 
+    baseUrl: "https://api.openweathermap.org/data/2.5/weather",
 }
 
 const searchInputBox = document.getElementById('input-box');
 
 // Event Listener Function on keypress
 searchInputBox.addEventListener('keypress', (event) => {
-    
-    if(event.keyCode == 13) {
+
+    if (event.keyCode == 13) {
         console.log(searchInputBox.value);
         getWeatherReport(searchInputBox.value);
         document.querySelector('.weather-body').style.display = "block";
@@ -21,13 +21,13 @@ searchInputBox.addEventListener('keypress', (event) => {
 // Get Weather Report
 function getWeatherReport(city) {
     fetch(`${weatherApi.baseUrl}?q=${city}&appid=${weatherApi.key}&units=metric`)
-    .then(weather => {
-        return weather.json();
-    }).then(showWeatherReport);
+        .then(weather => {
+            return weather.json();
+        }).then(showWeatherReport);
 }
 
 // Show Weather Report
-function showWeatherReport(weather){
+function showWeatherReport(weather) {
     console.log(weather);
 
     let city = document.getElementById('city');
@@ -46,31 +46,31 @@ function showWeatherReport(weather){
     let todayDate = new Date();
     date.innerText = dateManage(todayDate);
 
-    
-    if(weatherType.textContent == 'Clear') {
+
+    if (weatherType.textContent == 'Clear') {
         document.body.style.backgroundImage = "url('images/clear.jpg')";
-        
-    } else if(weatherType.textContent == 'Clouds') {
+
+    } else if (weatherType.textContent == 'Clouds') {
 
         document.body.style.backgroundImage = "url('images/cloud.jpg')";
-        
-    } else if(weatherType.textContent == 'Haze') {
+
+    } else if (weatherType.textContent == 'Haze') {
 
         document.body.style.backgroundImage = "url('images/cloud.jpg')";
-        
-    }     else if(weatherType.textContent == 'Rain') {
-        
+
+    } else if (weatherType.textContent == 'Rain') {
+
         document.body.style.backgroundImage = "url('images/rain.jpg')";
-        
-    } else if(weatherType.textContent == 'Snow') {
-        
+
+    } else if (weatherType.textContent == 'Snow') {
+
         document.body.style.backgroundImage = "url('images/snow.jpg')";
-    
-    } else if(weatherType.textContent == 'Thunderstorm') {
-    
+
+    } else if (weatherType.textContent == 'Thunderstorm') {
+
         document.body.style.backgroundImage = "url('images/thunderstorm.jpg')";
-        
-    } 
+
+    }
 }
 
 // Date manage
