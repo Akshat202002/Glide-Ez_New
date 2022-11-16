@@ -48,3 +48,7 @@
 - py -m pip install django-environ
 - py -m pip install --upgrade sweetify
 
+**For pdf creation**
+- py -m pip install reportlab 
+- py -m pip install html5lib
+- py -m pip install xhtml2pdf
