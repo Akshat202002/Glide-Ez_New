@@ -9,6 +9,8 @@ from django.contrib import messages #import messages
 import sweetify
 from django.template.defaulttags import register
 import json
+from django.views.decorators.csrf import csrf_exempt
+from glideEz.utils import render_to_pdf, createticket
 
 # Create your views here.
 def home(request): 
@@ -821,3 +823,14 @@ def passenger_view(request):
         print(total_price)
 
         return render(request, 'glideEz/Passenger.html',{'price': total_price,'seat_list':seat_list,'trip_id':trip_id})
+
+@csrf_exempt
+def get_ticket(request):
+    ref = request.GET.get("ref")
+    ticket1 = Ticket.objects.get(ref_no=ref)
+    data = {
+        'ticket1':ticket1,
+        'current_year': datetime.now().year
+    }
+    pdf = render_to_pdf('flight/ticket.html', data)
+    return HttpResponse(pdf, content_type='application/pdf')
