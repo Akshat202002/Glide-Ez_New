@@ -296,3 +296,18 @@ function paymentValidate() {
     }
   }
 }
+
+function seatSelectValidate() {
+  let seat = document.forms["seat_select_form"]["seats_selected"].value;
+  if (seat == "") {
+    alert("Seat must be selected");
+    return false;
+  }
+
+  // check if checkbox is not checked
+  if (seat.checked == false) {
+    alert("Seat must be selected");
+    return false;
+  }
+  return true;
+}

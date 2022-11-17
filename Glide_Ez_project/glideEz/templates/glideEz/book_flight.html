@@ -11,7 +11,7 @@
 {% block header %} <div class="gtco-loader"></div> {% endblock %}
 
 {% block content %}
-<form action="/Passengers" method="post">
+<form name="seat_select_form" action="/Passengers" method="post" onsubmit="return seatSelectValidate()">
     {% csrf_token %}
     <div class="plane">
         <div class="cockpit">
