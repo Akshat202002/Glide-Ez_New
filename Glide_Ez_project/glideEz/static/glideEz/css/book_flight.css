@@ -12,9 +12,10 @@ body {
     background-color: #101735;
 }
 
-/* form {
-    margin: 0 auto;
-} */
+form {
+    display: flex;
+    flex-direction: column;
+}
 
 .plane {
     margin: 20px auto;
@@ -100,10 +101,22 @@ ol {
 }
 
 .seats {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+}
+
+@media (max-width:1350px) {
+    .seats {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}
+
+@media (max-width:900px) {
+    .seats {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    }
 }
 
 .seat {
@@ -279,6 +292,8 @@ form {
     background-color: transparent;
 }
 
+
+
 form {
     border: none;
 }
@@ -286,11 +301,12 @@ form {
 #book_button {
     max-width: 200px;
     width: 100%;
-    background-color: white;
+
     padding: 5px 3px;
     border-radius: 8px;
-    box-shadow: 0 5px 10px rgb(6, 7, 6);
+
 }
+
 
 #book_button {
     display: flex;

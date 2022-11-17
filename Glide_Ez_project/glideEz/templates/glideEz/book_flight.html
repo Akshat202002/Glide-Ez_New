@@ -11,7 +11,7 @@
 {% block header %} <div class="gtco-loader"></div> {% endblock %}
 
 {% block content %}
-<form action="/Passengers" method="post">
+<form name="seat_select_form" action="/Passengers" method="post" onsubmit="return seatSelectValidate()">
     {% csrf_token %}
     <div class="plane">
         <div class="cockpit">
@@ -105,8 +105,8 @@
         <input type="hidden" name="flight_id" value="{{book_details.flight_id}}">
         <input type="hidden" name="trip_id" value="{{book_details.tr_ID}}">
         <input type="hidden" name="price" value="{{book_details.price}}">
-        <input class="btn btn-primary btn-danger border border-white rounded-pill"
-            style="background-color: #101735; border-color: #101735;" type="submit" value="Book Seats">
+        <input id="book-button" class="btn btn-primary btn-danger border border-white rounded-pill btn-inverse"
+            type="submit" value="Book Seats">
     </div>
 </form>
 {% endblock %}
