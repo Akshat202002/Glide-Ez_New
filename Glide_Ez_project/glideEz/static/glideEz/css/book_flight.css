@@ -101,10 +101,22 @@ ol {
 }
 
 .seats {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+}
+
+@media (max-width:1350px) {
+    .seats {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    }
+}
+
+@media (max-width:900px) {
+    .seats {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    }
 }
 
 .seat {
