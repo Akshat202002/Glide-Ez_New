@@ -298,7 +298,11 @@ function paymentValidate() {
 }
 
 function seatSelectValidate() {
-  let seat = document.forms["seat_select_form"]["seats_selected"].value;
-  alert(seat);
-  return true;
+  let seat_form = new FormData(document.querySelector("form"));
+  if (!seat_form.has("seats_selected")) {
+    alert("Please select a seat");
+    return false;
+  } else {
+    return true;
+  }
 }
