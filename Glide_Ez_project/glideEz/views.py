@@ -571,14 +571,15 @@ def bookings_view(request):
     str = """Select * from booking where user_ID = {} order by booking_id desc;""".format(user_id)
     mycursor.execute(str)
     booking_det = mycursor.fetchall()
+    print(booking_det)
     if len(booking_det)>0:
-        placeholders=json.dumps(tuple([key for key in booking_det])).replace(']', ')').replace('[','(')  
+        placeholders=json.dumps(tuple([key[0] for key in booking_det])).replace(']', ')').replace('[','(')  
         query = """select t.ticket_ID,Flight.Flight_ID,Flight.Flight_Name,Booking.Booking_ID,Trip.Depart_time,
-    (select loc from Airport where Airport_ID=t.src_ID) src,(select loc from Airport where Airport_ID=t.dest_ID) dest,
-    Seat.Seat_No,Seat.Class_Type,Passenger.P_Name,Passenger.DOB,Passenger.Phone_No
-     from ticket t,Booking,Passenger,Airport,Flight,Seat,Trip where 
-    t.booking_ID=Booking.Booking_ID and t.Passenger_ID=Passenger.Passenger_ID and Flight.Flight_ID=t.Ticket_ID and 
-    Trip.Trip_ID=t.Trip_ID and Seat.Seat_No=t.Seat_No and Booking.Booking_ID in {};""".format(placeholders)
+        (select loc from Airport where Airport_ID=t.src_ID) src,(select loc from Airport where Airport_ID=t.dest_ID) dest,
+        Seat.Seat_No,Seat.Class_Type,Passenger.P_Name,Passenger.DOB,Passenger.Phone_No
+        from ticket t,Booking,Passenger,Airport,Flight,Seat,Trip where 
+        t.booking_ID=Booking.Booking_ID and t.Passenger_ID=Passenger.Passenger_ID and Flight.Flight_ID=t.Ticket_ID and 
+        Trip.Trip_ID=t.Trip_ID and Seat.Seat_No=t.Seat_No and Booking.Booking_ID in {};""".format(placeholders)
         mycursor.execute(query)
         tickets = mycursor.fetchall()
 
