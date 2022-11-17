@@ -10,7 +10,7 @@ import sweetify
 from django.template.defaulttags import register
 import json
 from django.views.decorators.csrf import csrf_exempt
-from glideEz.utils import render_to_pdf, createticket
+# from glideEz.utils import render_to_pdf, createticket
 
 # Create your views here.
 def home(request): 

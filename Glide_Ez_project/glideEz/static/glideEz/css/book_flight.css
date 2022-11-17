@@ -12,9 +12,10 @@ body {
     background-color: #101735;
 }
 
-/* form {
-    margin: 0 auto;
-} */
+form {
+    display: flex;
+    flex-direction: column;
+}
 
 .plane {
     margin: 20px auto;
@@ -279,6 +280,8 @@ form {
     background-color: transparent;
 }
 
+
+
 form {
     border: none;
 }
@@ -286,11 +289,12 @@ form {
 #book_button {
     max-width: 200px;
     width: 100%;
-    background-color: white;
+
     padding: 5px 3px;
     border-radius: 8px;
-    box-shadow: 0 5px 10px rgb(6, 7, 6);
+
 }
+
 
 #book_button {
     display: flex;
