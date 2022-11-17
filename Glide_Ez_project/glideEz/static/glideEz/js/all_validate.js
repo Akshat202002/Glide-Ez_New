@@ -173,7 +173,6 @@ function registerAirlineValidate() {
     alert("Address must be filled out");
     return false;
   }
-
   return true;
 }
 
@@ -305,7 +304,6 @@ function seatSelectValidate() {
       icon: 'error',
       title: 'Oops...',
       text: 'Please select a seat!',
-      height: 150
     })
     return false;
   } else {
