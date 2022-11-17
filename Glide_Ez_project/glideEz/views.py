@@ -563,7 +563,7 @@ def bookings_view(request):
         )
     mycursor = mydb.cursor()
 
-    str = """select user_id from user where email = {};""".format(request.session['Email'])
+    str = """select user_id from user where email = '{}';""".format(request.session['email'])
     mycursor.execute(str)
     user_id = mycursor.fetchall()
     user_id = user_id[0][0]
@@ -571,25 +571,26 @@ def bookings_view(request):
     str = """Select * from booking where user_ID = {} order by booking_id desc;""".format(user_id)
     mycursor.execute(str)
     booking_det = mycursor.fetchall()
-
-    placeholders=json.dumps(tuple([key for key in booking_det])).replace(']', ')').replace('[','(')  
-    query = """select t.ticket_ID,Flight.Flight_ID,Flight.Flight_Name,Booking.Booking_ID,Trip.Depart_time,
+    if len(booking_det)>0:
+        placeholders=json.dumps(tuple([key for key in booking_det])).replace(']', ')').replace('[','(')  
+        query = """select t.ticket_ID,Flight.Flight_ID,Flight.Flight_Name,Booking.Booking_ID,Trip.Depart_time,
     (select loc from Airport where Airport_ID=t.src_ID) src,(select loc from Airport where Airport_ID=t.dest_ID) dest,
     Seat.Seat_No,Seat.Class_Type,Passenger.P_Name,Passenger.DOB,Passenger.Phone_No
      from ticket t,Booking,Passenger,Airport,Flight,Seat,Trip where 
     t.booking_ID=Booking.Booking_ID and t.Passenger_ID=Passenger.Passenger_ID and Flight.Flight_ID=t.Ticket_ID and 
     Trip.Trip_ID=t.Trip_ID and Seat.Seat_No=t.Seat_No and Booking.Booking_ID in {};""".format(placeholders)
-    mycursor.execute(query)
-    tickets = mycursor.fetchall()
+        mycursor.execute(query)
+        tickets = mycursor.fetchall()
 
 
-    tickets_det = {}
-    for booking in booking_det:
-        tickets_det[booking[0]] = []
-    for ticket in tickets:
-        tickets_det[ticket[3]].append(ticket) 
-    return render(request, "glideEz/bookings.html", {'booking_details': booking_det,'tickets':tickets_det})
-
+        tickets_det = {}
+        for booking in booking_det:
+            tickets_det[booking[0]] = []
+        for ticket in tickets:
+            tickets_det[ticket[3]].append(ticket) 
+        return render(request, "glideEz/bookings.html", {'booking_details': booking_det,'tickets':tickets_det})
+    else:
+        return render(request, "glideEz/bookings.html")
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def logout_view(request):
