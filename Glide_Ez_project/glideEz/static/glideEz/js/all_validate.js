@@ -300,7 +300,13 @@ function paymentValidate() {
 function seatSelectValidate() {
   let seat_form = new FormData(document.querySelector("form"));
   if (!seat_form.has("seats_selected")) {
-    alert("Please select a seat");
+    // alert("Please select a seat");
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Please select a seat!',
+      height: 150
+    })
     return false;
   } else {
     return true;
