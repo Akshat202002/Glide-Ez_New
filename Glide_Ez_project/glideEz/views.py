@@ -17,7 +17,7 @@ def home(request):
     mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="12348765",
+            password="gssam@195",
             database="glide_ez"
         )
     mycursor = mydb.cursor()
@@ -79,7 +79,7 @@ def register_user_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="12348765",
+            password="gssam@195",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -110,7 +110,7 @@ def login_user_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="12348765",
+            password="gssam@195",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -175,7 +175,7 @@ def forgot_password_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="12348765",
+            password="gssam@195",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -199,7 +199,7 @@ def view_account_view(request):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="12348765",
+        password="gssam@195",
         database="glide_ez"
     )
     mycursor = mydb.cursor()
@@ -263,7 +263,7 @@ def edit_account_details_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="12348765",
+            password="gssam@195",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -286,7 +286,7 @@ def edit_account_details_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="12348765",
+            password="gssam@195",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -348,7 +348,7 @@ def search_flight_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="12348765",
+            password="gssam@195",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -408,7 +408,7 @@ def book_flight_view(request):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="12348765",
+        password="gssam@195",
         database="glide_ez"
     )
     mycursor = mydb.cursor()
@@ -504,7 +504,7 @@ def payment_redirect_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="12348765",
+            password="gssam@195",
             database="glide_ez"
         )
         total_price=request.POST.get("price")
@@ -840,7 +840,35 @@ def airline_contact_view(request):
 def get_item(dictionary, key):
     return dictionary.get(key)
 
+@register.filter
+def get_duration(arr):
+    arrival_date = arr[3]
+    departure_date = arr[2]
+    duration = arrival_date - departure_date
+    # in seconds
+    duration_in_s = duration.total_seconds()
+    print("Duration in seconds: ", duration_in_s)
 
+    # in days
+    duration_in_d = duration_in_s // (24 * 3600)
+
+    duration_in_s -= duration_in_d * (24 * 3600)
+    # in hours
+    duration_in_h = duration_in_s // 3600
+    duration_in_s -= duration_in_h * (3600)
+    
+
+    # in minutes
+    duration_in_m = duration_in_s // 60
+
+
+
+    # Return duration as days, hours, minutes
+    duration = str(int(duration_in_d)) + " d " + str(int(duration_in_h)) + " h " + str(int(duration_in_m)) + " m"
+    return duration
+
+
+   
 def Ticket_view(request):
 
     mydb = mysql.connector.connect(
@@ -850,7 +878,7 @@ def Ticket_view(request):
             database="glide_ez"
         )
     mycursor = mydb.cursor()
-    str = """Select * from ticket where ticket_ID = {};""".format(Ticket)
+    
     return render(request,'glideEz/ticket.html')
 
 def passenger_view(request):
