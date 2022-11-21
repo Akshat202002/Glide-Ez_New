@@ -6,14 +6,15 @@
 <link rel="icon" type="image/ico" href="/static/img/favicon.ico" />
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
-</script>
+    </script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
     integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-</script>
+    </script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
-</script>
+    </script>
 <link rel="stylesheet" href="../../static/glideEz/css/bookings_style.css" />
+<link rel="stylesheet" href="../../static/glideEz/css/book_style.css" />
 <link rel="stylesheet" href="../../static/glideEz/css/layout_style.css" />
 <title>Bookings</title>
 
@@ -31,21 +32,18 @@
 
         <div class="row each-booking-div" id="{{booking.0}}" style="flex: 100%;width: 100%;">
 
-            <details>
-                <summary>
-                    <h1>{{booking_details}}</h1>
-                    <hr>
-                    <h2>{{ticket}}</h2>
+            <details style="width: 100%; flex: 100%;">
+                <summary style="display: flex; align-items: center;">
                     <div class="col-2" style="display: flex;">
                         <div style="display: flex; color: #666666; margin-top: auto;">
                             <div>
-                                <span style="font-size: 2.1em;">{{ticket.flight_ddate | date:"d"}}</span>
+                                <span style="font-size: 2.1em;">{{booking.6 | date:"d"}}</span>
                             </div>
                             <div
                                 style="font-size: smaller; display: flex; margin: auto 0; padding-left: 5px; line-height: 1em;">
                                 <div style="margin: auto;">
-                                    <div style="margin-bottom: 1px;">{{ticket.flight_ddate | date:"D"}}</div>
-                                    <div style="margin-top: 1px;">{{ticket.flight_ddate | date:"M'y"}}</div>
+                                    <div style="margin-bottom: 1px;">{{booking.6  | date:"D"}}</div>
+                                    <div style="margin-top: 1px;">{{booking.6  | date:"M'y"}}</div>
                                 </div>
                             </div>
                         </div>
@@ -53,40 +51,32 @@
                     <div class="col-4 middle-div">
                         <div style="width:100%">
                             <div class="row places-div" style=" display: flex;">
-                                <div style="max-width: 45%;">{{ticket.flight.origin.city}}</div>
+                                <div style="max-width: 45%;">{{booking.7}}</div>
                                 <div>&nbsp;-&nbsp;</div>
-                                <div style="max-width: 45%;">{{ticket.flight.destination.city}}</div>
+                                <div style="max-width: 45%;">{{booking.8}}</div>
                             </div>
                             <div class="row places-div" style="font-size: .8em; color: #999999; ">
-                                <div style="max-width: 100%;">{{ticket.flight.airline}} &middot; {{ticket.flight.plane}}
-                                    &middot; {{ticket.passengers.count}} Passengers</div>
+                                <div style="max-width: 100%;">{{booking.10}} &middot; {{booking.9}}
+                                    &middot; {{tickets|get_item:booking.0|length}} Passengers</div>
                             </div>
                         </div>
                     </div>
                     <div class="col-2 middle-div">
-                        <div style="font-size: 1.2em; color: #945937;">{{ticket.ref_no}}</div>
+                        <div style="font-size: 1.2em; color: #945937;">{{booking.0}}</div>
                     </div>
                     <div class="col-2 middle-div">
                         <div>
                             <div class="row status-div">
-                                {% if ticket.status == 'CONFIRMED' %}
-                                <div class="green">{{ticket.status}}</div>
-                                {% endif %}
-                                {% if ticket.status == 'PENDING' %}
-                                <div class="orange">{{ticket.status}}</div>
-                                {% endif %}
-                                {% if ticket.status == 'CANCELLED' %}
-                                <div class="red">{{ticket.status}}</div>
+                                {% if booking.4 == 1 %}
+                                <div class="green">CONFIRMED</div>
+                                {% else%}
+                                <div class="red">CANCELLED</div>
                                 {% endif %}
                             </div>
                             <div class="row booking-date-div" style="font-size: .7em; color: #666;">
-                                {% if ticket.status == 'CONFIRMED' %}
-                                Booked on: {{ticket.booking_date | date:"D, M d Y"}}
-                                {% endif %}
-                                {% if ticket.status == 'PENDING' %}
-                                Reviewed on: {{ticket.booking_date | date:"D, M d Y"}}
-                                {% endif %}
-                                {% if ticket.status == 'CANCELLED' %}
+                                {% if booking.4 == 1 %}
+                                Booked on: {{booking.5 | date:"D, M d Y"}}
+                                {% else %}
                                 {% endif %}
                             </div>
                         </div>
@@ -94,21 +84,13 @@
                     <div class="col-2 last-div">
                         <div>
                             <div class="ticket-action-div">
-                                {% if ticket.status == 'CONFIRMED' %}
+                                {% if booking.4 == 1 %}
                                 <!--<button class="btn btn-outline-primary btnp">Print Ticket</button>-->
-                                <form action="{% url 'getticket' %}" method="get" target="_blank">
-                                    <input type="hidden" name="ref" value="{{ticket.ref_no}}">
-                                    <button type="submit" class="btn btn-outline-info btnp pbtn">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                            fill="currentColor" class="bi bi-printer" viewBox="0 0 16 16">
-                                            <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z" />
-                                            <path
-                                                d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z" />
-                                        </svg>
-                                    </button>
-                                </form>
-                                <button class="btn btn-outline-danger btnp cbtn" data-ref="{{ticket.ref_no}}"
+                                <form action="#" onclick="return cancel_confirm()" method="post">
+                                    <input type="hidden" name="ref" value="{{booking.0}}">
+                                    <button class="btn btn-outline-danger btnp cbtn" data-ref="{{booking.0}}"
                                     onclick="popup(this)">Cancel</button>
+                                </form>
                                 {% endif %}
                                 {% if ticket.status == 'PENDING' %}
                                 <form action="{% url 'resumebooking' %}" method="POST">
@@ -133,40 +115,42 @@
                     </div>
                 </summary>
                 <p>
-                    <div class="media-airline">
-                        <div>
-                            <div class="brand">{{flight1.airline}}</div>
-                            <div>&nbsp;&middot;&nbsp;</div>
-                            <div class="plane-name">{{flight1.plane}}</div>
-                            <div>&nbsp;&middot;&nbsp;</div>
-                            <div class="plane-name">{{seat}}</div>
-                        </div>
+                    {%for ticket in tickets|get_item:booking.0 %}
+                <div class="media-airline">
+                    <div>
+                        <div class="brand">{{flight1.airline}}</div>
+                        <div>&nbsp;&middot;&nbsp;</div>
+                        <div class="plane-name">{{flight1.plane}}</div>
+                        <div>&nbsp;&middot;&nbsp;</div>
+                        <div class="plane-name">{{seat}}</div>
                     </div>
-                    <div class="row ticket-details-div">
-                        <div class="col-3 airline-name">
-                            <div class="brand">{{flight1.airline}}</div>
-                            <div class="plane-name">{{flight1.plane}}</div>
-                        </div>
-                        <div class="col-3 depart-time">
-                            <div class="time">{{flight1.depart_time | time:'H:i'}}</div>
-                            <div class="date ddate" data-value='{{flight1ddate | date:"d-m-Y"}}'>{{flight1ddate |
+                </div>
+                <div class="row ticket-details-div">
+                    <div class="col-3 airline-name">
+                        <div class="brand">{{flight1.airline}}</div>
+                        <div class="plane-name">{{flight1.plane}}</div>
+                    </div>
+                    <div class="col-3 depart-time">
+                        <div class="time">{{flight1.depart_time | time:'H:i'}}</div>
+                        <div class="date ddate" data-value='{{flight1ddate | date:"d-m-Y"}}'>{{flight1ddate |
                             date:"D, d
                             M y"}}</div>
-                            <div class="place">{{flight1.origin.city}}</div>
-                            <div class="airport">{{flight1.origin.airport}}</div>
-                        </div>
-                        <div class="col-3 time-details">
-                            <div class="duration" data-value="{{flight1.duration}}"></div>
-                        </div>
-                        <div class="col-3 arrival-time">
-                            <div class="time">{{flight1.arrival_time | time:'H:i'}}</div>
-                            <div class="date adate" data-value='{{flight1adate | date:"d-m-Y"}}'>{{flight1adate |
+                        <div class="place">{{flight1.origin.city}}</div>
+                        <div class="airport">{{flight1.origin.airport}}</div>
+                    </div>
+                    <div class="col-3 time-details">
+                        <div class="duration" data-value="{{flight1.duration}}"></div>
+                    </div>
+                    <div class="col-3 arrival-time">
+                        <div class="time">{{flight1.arrival_time | time:'H:i'}}</div>
+                        <div class="date adate" data-value='{{flight1adate | date:"d-m-Y"}}'>{{flight1adate |
                             date:"D, d
                             M y"}}</div>
-                            <div class="place">{{flight1.destination.city}}</div>
-                            <div class="airport">{{flight1.destination.airport}}</div>
-                        </div>
+                        <div class="place">{{flight1.destination.city}}</div>
+                        <div class="airport">{{flight1.destination.airport}}</div>
                     </div>
+                </div>
+                {%endfor%}
                 </p>
             </details>
 
