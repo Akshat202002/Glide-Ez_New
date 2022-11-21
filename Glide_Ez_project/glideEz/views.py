@@ -545,7 +545,7 @@ def payment_redirect_view(request):
         mycursor.execute(str)
         x=mycursor.fetchall()
         x=x[0][0]
-        str="""insert into booking values(null,{},{},{},true);""".format(user_id,trip_id,payment_id)
+        str="""insert into booking values(null,{},{},{},true,'{}');""".format(user_id,trip_id,payment_id, datetime.datetime.now().date().strftime('%Y-%m-%d'))
         mycursor.execute(str)
         for seat in seat_list:
             str="""SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_SCHEMA = "glide_ez" AND TABLE_NAME = "Passenger";"""
@@ -578,13 +578,15 @@ def bookings_view(request):
     user_id = mycursor.fetchall()
     user_id = user_id[0][0]
 
-    str = """Select * from booking where user_ID = {} order by booking_id desc;""".format(user_id)
+    str = """Select booking.*,trip.depart_time,(select loc from Airport where Airport_ID=trip.src_ID),(select loc from Airport where Airport_ID=trip.dest_ID),flight.flight_name,airline.airline_name
+    from booking,trip,flight,airline
+    where user_ID = {} and Trip.Trip_ID=Booking.Trip_ID and trip.flight_id=flight.flight_id and flight.fk_airline_id=airline.airline_id order by booking_id desc;""".format(user_id)
     mycursor.execute(str)
     booking_det = mycursor.fetchall()
     print(booking_det)
     if len(booking_det)>0:
         placeholders=json.dumps(tuple([key[0] for key in booking_det])).replace(']', ')').replace('[','(')  
-        query = """select distinct t.ticket_ID,Flight.Flight_ID,Flight.Flight_Name,Booking.Booking_ID,Trip.Depart_time,Trip.arrival_time,
+        query = """select distinct t.ticket_ID,Flight.Flight_ID,Flight.Flight_Name,Booking.Booking_ID,Trip.Depart_time,Trip.arrival_time,t.ticket_status,
         (select loc from Airport where Airport_ID=t.src_ID) src,(select loc from Airport where Airport_ID=t.dest_ID) dest,
         Seat.Seat_No,Seat.Class_Type,Passenger.P_Name,Passenger.DOB,Passenger.Phone_No
         from ticket t,Booking,Passenger,Airport,Flight,Seat,Trip where 
