@@ -86,10 +86,12 @@
                             <div class="ticket-action-div">
                                 {% if booking.4 == 1 %}
                                 <!--<button class="btn btn-outline-primary btnp">Print Ticket</button>-->
-                                <form action="#" onclick="return cancelTicketConfirm()" method="post">
+                                <form action="#" method="post">
+                                    {% csrf_token %}
                                     <input type="hidden" name="ref" value="{{booking.0}}">
-                                    <button class="btn btn-outline-danger btnp cbtn" data-ref="{{booking.0}}"
-                                        onclick="popup(this)">Cancel</button>
+                                    <button onclick="return cancelTicketConfirm()"
+                                        class="btn btn-outline-danger btnp cbtn"
+                                        data-ref="{{booking.0}}">Cancel</button>
                                 </form>
                                 {% endif %}
                                 {% if ticket.status == 'PENDING' %}
