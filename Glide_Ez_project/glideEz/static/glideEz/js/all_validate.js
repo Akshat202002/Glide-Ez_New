@@ -310,3 +310,15 @@ function seatSelectValidate() {
     return true;
   }
 }
+
+function cancelTicketConfirm() {
+  // Get template with id my-template
+  preventDefault();
+  templateId = document.getElementById('my-template');
+
+  Swal.fire({
+    template: 'templateId'
+  })
+  return False;
+
+}
