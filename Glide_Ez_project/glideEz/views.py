@@ -17,7 +17,7 @@ def home(request):
     mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
     mycursor = mydb.cursor()
@@ -79,7 +79,7 @@ def register_user_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -110,7 +110,7 @@ def login_user_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -175,7 +175,7 @@ def forgot_password_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -199,7 +199,7 @@ def view_account_view(request):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="2002",
+        password="12348765",
         database="glide_ez"
     )
     mycursor = mydb.cursor()
@@ -263,7 +263,7 @@ def edit_account_details_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -286,7 +286,7 @@ def edit_account_details_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -348,7 +348,7 @@ def search_flight_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         mycursor = mydb.cursor()
@@ -408,7 +408,7 @@ def book_flight_view(request):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="2002",
+        password="12348765",
         database="glide_ez"
     )
     mycursor = mydb.cursor()
@@ -504,7 +504,7 @@ def payment_redirect_view(request):
         mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
         total_price=request.POST.get("price")
@@ -568,7 +568,7 @@ def bookings_view(request):
     mydb = mysql.connector.connect(
             host="localhost",
             user="root",
-            password="2002",
+            password="12348765",
             database="glide_ez"
         )
     mycursor = mydb.cursor()
@@ -587,8 +587,8 @@ def bookings_view(request):
     if len(booking_det)>0:
         placeholders=json.dumps(tuple([key[0] for key in booking_det])).replace(']', ')').replace('[','(')  
         query = """select distinct t.ticket_ID,Flight.Flight_ID,Flight.Flight_Name,Booking.Booking_ID,Trip.Depart_time,Trip.arrival_time,t.ticket_status,
-        (select loc from Airport where Airport_ID=t.src_ID) src,(select loc from Airport where Airport_ID=t.dest_ID) dest,
-        Seat.Seat_No,Seat.Class_Type,Passenger.P_Name,Passenger.DOB,Passenger.Phone_No
+        (select loc from Airport where Airport_ID=t.src_ID) src,(select Airport_Name from Airport where Airport_ID=t.src_ID) src_ap,(select loc from Airport where Airport_ID=t.dest_ID) dest,
+        (select Airport_Name from Airport where Airport_ID=t.dest_ID) dest_ap,Seat.Seat_No,Seat.Class_Type,Passenger.P_Name,Passenger.DOB,Passenger.Phone_No
         from ticket t,Booking,Passenger,Airport,Flight,Seat,Trip where 
         t.booking_ID=Booking.Booking_ID and t.Passenger_ID=Passenger.Passenger_ID and Flight.Flight_ID=trip.flight_id and 
         Trip.Trip_ID=t.Trip_ID and Seat.Seat_No=t.Seat_No and seat.trip_id=t.trip_id and Booking.Booking_ID in {};""".format(placeholders)
@@ -605,6 +605,25 @@ def bookings_view(request):
         return render(request, "glideEz/bookings.html", {'booking_details': booking_det,'tickets':tickets_det})
     else:
         return render(request, "glideEz/bookings.html")
+
+def cancelbooking(request):
+    mydb = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="12348765",
+            database="glide_ez"
+        )
+    mycursor = mydb.cursor()
+    booking_id=request.POST.get('ref')
+    trip_id=request.POST.get('trip_id')
+    str="""select seat_no from ticket where booking_id={};""".format(booking_id)
+    mycursor.execute(str)
+    seat=mycursor.fetchall()
+    placeholders=json.dumps(tuple([key[0] for key in seat])).replace(']', ')').replace('[','(')
+    str="""update table seat set busy=false where trip_id={} and seat_no in {};""".format(trip_id,placeholders)    
+    str="""delete from booking where booking_id={};""".format(booking_id)
+    mydb.commit()
+
 
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def logout_view(request):
@@ -869,6 +888,32 @@ def get_duration(arr):
     duration = str(int(duration_in_d)) + " d " + str(int(duration_in_h)) + " h " + str(int(duration_in_m)) + " m"
     return duration
 
+@register.filter
+def get_ticket_duration(arr):
+    arrival_date = arr[5]
+    departure_date = arr[4]
+    duration = arrival_date - departure_date
+    # in seconds
+    duration_in_s = duration.total_seconds()
+    print("Duration in seconds: ", duration_in_s)
+
+    # in days
+    duration_in_d = duration_in_s // (24 * 3600)
+
+    duration_in_s -= duration_in_d * (24 * 3600)
+    # in hours
+    duration_in_h = duration_in_s // 3600
+    duration_in_s -= duration_in_h * (3600)
+    
+
+    # in minutes
+    duration_in_m = duration_in_s // 60
+
+
+
+    # Return duration as days, hours, minutes
+    duration = str(int(duration_in_d)) + " d " + str(int(duration_in_h)) + " h " + str(int(duration_in_m)) + " m"
+    return duration
 
    
 def Ticket_view(request):
