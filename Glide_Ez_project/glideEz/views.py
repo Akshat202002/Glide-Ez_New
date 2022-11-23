@@ -606,6 +606,25 @@ def bookings_view(request):
     else:
         return render(request, "glideEz/bookings.html")
 
+def cancelbooking(request):
+    mydb = mysql.connector.connect(
+            host="localhost",
+            user="root",
+            password="12348765",
+            database="glide_ez"
+        )
+    mycursor = mydb.cursor()
+    booking_id=request.POST.get('ref')
+    trip_id=request.POST.get('trip_id')
+    str="""select seat_no from ticket where booking_id={};""".format(booking_id)
+    mycursor.execute(str)
+    seat=mycursor.fetchall()
+    placeholders=json.dumps(tuple([key[0] for key in seat])).replace(']', ')').replace('[','(')
+    str="""update table seat set busy=false where trip_id={} and seat_no in {};""".format(trip_id,placeholders)    
+    str="""delete from booking where booking_id={};""".format(booking_id)
+    mydb.commit()
+
+
 @cache_control(no_cache=True, must_revalidate=True, no_store=True)
 def logout_view(request):
     # if user is logged in

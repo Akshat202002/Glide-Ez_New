@@ -27,5 +27,6 @@ urlpatterns = [
     path("addtrip_form",views.addtrip_form_view,name="addtrip_form"),
     path("Ticket",views.Ticket_view,name="Ticket"),
     path("Passengers",views.passenger_view,name="Passengers"),
-    path('getticket',views.get_ticket, name='getticket')
+    path('getticket',views.get_ticket, name='getticket'),
+    path('cancelbooking',views.cancelbooking, name='cancelbooking')
 ]

@@ -86,9 +86,10 @@
                             <div class="ticket-action-div">
                                 {% if booking.4 == 1 %}
                                 <!--<button class="btn btn-outline-primary btnp">Print Ticket</button>-->
-                                <form action="#" method="post">
+                                <form action="/cancelticket" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="ref" value="{{booking.0}}">
+                                    <input type="hidden" name="trip_id" value="{{booking.2}}">
                                     <button onclick="return cancelTicketConfirm()"
                                         class="btn btn-outline-danger btnp cbtn"
                                         data-ref="{{booking.0}}">Cancel</button>
@@ -100,31 +101,46 @@
                     </div>
                 </summary>
                 <p>
+                    {% if booking.4 == 1 %}
                     {%for ticket in tickets|get_item:booking.0 %}
-                        <div class="ticket-details">
-                            <div class="row ticket-details-div">
-                                <div class="col-3 airline-name">
-                                    <div class="brand">{{booking.10}}</div>
-                                    <div class="plane-name">{{ticket.2}}</div>
-                                </div>
-                                <div class="col-3 depart-time">
-                                    <div class="time">{{ticket.4 | time:'H:i'}}</div>
-                                    <div class="date ddate" data-value='{{ticket.4 | date:"d-m-Y"}}'>{{ticket.4|date:"D, d M y"}}</div>
-                                    <div class="place">{{ticket.7}}</div>
-                                    <div class="airport">{{ticket.8}}</div>
-                                </div>
-                                <div class="col-3 time-details">
-                                    <div class="duration" data-value="{{ticket|get_ticket_duration}}">{{ticket|get_ticket_duration}}</div>
-                                </div>
-                                <div class="col-3 arrival-time">
-                                    <div class="time">{{ticket.5 | time:'H:i'}}</div>
-                                    <div class="date adate" data-value='{{ticket.6 | date:"d-m-Y"}}'>{{ticket.5|date:"D, d M y"}}</div>
-                                    <div class="place">{{ticket.9}}</div>
-                                    <div class="airport">{{ticket.10}}</div>
+                <div class="ticket-details" style="align-content: center;">
+                    <div class="row ticket-details-div">
+                        <div class="col-2 airline-name">
+                            <div class="brand">{{ticket.13}}</div>
+                            <div class="plane-name">{{ticket.11}}</div>
+                        </div>
+                        <div class="col-2 depart-time">
+                            <div class="time">{{ticket.4 | time:'H:i'}}</div>
+                            <div class="date ddate" data-value='{{ticket.4 | date:"d-m-Y"}}'>{{ticket.4|date:"D, d M y"}} </div>
+                            <div class="place">{{ticket.7}}</div>
+                            <div class="airport">{{ticket.8}}</div>
+                        </div>
+                        <div class="col-2 time-details">
+                            <div class="duration" data-value="{{ticket|get_ticket_duration}}">
+                                {{ticket|get_ticket_duration}}</div>
+                        </div>
+                        <div class="col-2 arrival-time">
+                            <div class="time">{{ticket.5 | time:'H:i'}}</div>
+                            <div class="date adate" data-value='{{ticket.6 | date:"d-m-Y"}}'>{{ticket.5|date:"D, d M y"}} </div>
+                            <div class="place">{{ticket.9}}</div>
+                            <div class="airport">{{ticket.10}}</div>
+                        </div>
+                        <div class="col-4 last-div">
+                            <div>
+                                <div class="ticket-action-div">
+                                    <form action="#" method="post">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="ref" value="{{ticket.0}}">
+                                        <button class="btn btn-outline-danger btnp cbtn" type="Submit"
+                                            data-ref="{{booking.0}}">Print ticket</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
                 {%endfor%}
+                {%endif%}
                 </p>
             </details>
 
