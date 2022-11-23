@@ -28,5 +28,5 @@ urlpatterns = [
     path("Ticket",views.Ticket_view,name="Ticket"),
     path("Passengers",views.passenger_view,name="Passengers"),
     path('getticket',views.get_ticket, name='getticket'),
-    path('cancelbooking',views.cancelbooking, name='cancelbooking')
+    path('cancelbooking',views.cancelbooking, name='cancelbooking'),
 ]
