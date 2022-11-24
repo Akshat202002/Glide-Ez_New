@@ -312,13 +312,28 @@ function seatSelectValidate() {
 }
 
 function cancelTicketConfirm() {
-  // Get template with id my-template
+  // Prveent default action
   preventDefault();
-  templateId = document.getElementById('my-template');
-
   Swal.fire({
-    template: 'templateId'
+    title: 'Do you want to save the changes?',
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Yes',
+    denyButtonText: 'No',
+    customClass: {
+      actions: 'my-actions',
+      cancelButton: 'order-1 right-gap',
+      confirmButton: 'order-2',
+      denyButton: 'order-3',
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      Swal.fire('Saved!', '', 'success')
+      return true;
+    } else if (result.isDenied) {
+      Swal.fire('Changes are not saved', '', 'info')
+      return false;
+    }
   })
-  return False;
 
 }

@@ -13,9 +13,9 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
 </script>
-<link rel="stylesheet" href="../../static/glideEz/css/bookings_style.css" />
-<link rel="stylesheet" href="../../static/glideEz/css/book_style.css" />
 <link rel="stylesheet" href="../../static/glideEz/css/layout_style.css" />
+<link rel="stylesheet" href="../../static/glideEz/css/book_style.css" />
+<link rel="stylesheet" href="../../static/glideEz/css/bookings_style.css" />
 <title>Bookings</title>
 
 {% endblock %}
@@ -86,12 +86,11 @@
                             <div class="ticket-action-div">
                                 {% if booking.4 == 1 %}
                                 <!--<button class="btn btn-outline-primary btnp">Print Ticket</button>-->
-                                <form action="/cancelbooking" method="post">
+                                <form id="confirm-cancel-form" action="/cancelbooking" method="post">
                                     {% csrf_token %}
                                     <input type="hidden" name="ref" value="{{booking.0}}">
                                     <input type="hidden" name="trip_id" value="{{booking.2}}">
-                                    <button onclick="return cancelTicketConfirm()"
-                                        class="btn btn-outline-danger btnp cbtn"
+                                    <button id="cancel-btn" type="submit" class="btn btn-outline-danger btnp cbtn"
                                         data-ref="{{booking.0}}">Cancel</button>
                                 </form>
                                 {% elif booking.4 == 0 %}
@@ -187,6 +186,37 @@
 {% endblock %}
 
 {% block footer %}
+
+<script>
+    const form = document.querySelector('#confirm-cancel-form');
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        Swal.fire({
+            title: 'Do you want to Cancel the booking?',
+            icon: 'warning',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            denyButtonText: 'No',
+            customClass: {
+                actions: 'my-actions',
+                cancelButton: 'order-1 right-gap',
+                confirmButton: 'order-2',
+                denyButton: 'order-3',
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('Cancelled!', '', 'success')
+
+                this.submit();
+            } else if (result.isDenied) {
+                Swal.fire('Changes are not saved', '', 'info')
+                return false;
+            }
+        })
+    });
+</script>
+
 <!-- jQuery -->
 <!-- <script src="js/jquery.min.js"></script> -->
 <script src="../../static/glideEz/js/jquery.min.js"></script>
