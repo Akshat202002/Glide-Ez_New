@@ -104,7 +104,7 @@
                     {%for ticket in tickets|get_item:booking.0 %}
                     <div class="ticket-details" style="align-content: center;">
                         <div class="row ticket-details-div">
-                            <div class="col-2 airline-name">
+                            <div class="col-3 airline-name">
                                 <div class="brand">{{ticket.13}}</div>
                                 <div class="plane-name">{{ticket.11}}</div>
                             </div>
@@ -126,7 +126,7 @@
                                 <div class="place">{{ticket.9}}</div>
                                 <div class="airport">{{ticket.10}}</div>
                             </div>
-                            <div class="col-4 last-div">
+                            <div class="col-3 last-div">
                                 <div>
                                     <div class="ticket-action-div">
                                         <form action="/Ticket" method="post">
