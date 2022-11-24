@@ -11,7 +11,9 @@ from django.template.defaulttags import register
 import json
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import EmailMultiAlternatives
-from Glide_Ez_project.utils import render_to_pdf
+from Glide_Ez_project.utils import render_to_pdf, render_to_pdf2
+import urllib.request
+import json
 
 # Create your views here.
 def home(request): 
@@ -944,6 +946,18 @@ def Ticket_view(request):
     
     # return render(request,'glideEz/ticket.html',{'ticket':ticket[0]})
     pdf = render_to_pdf('glideEz/ticket.html', {'ticket':ticket[0]})
+    pdf2 = render_to_pdf2('glideEz/ticket.html', {'ticket':ticket[0]})
+
+    
+    # Get email from session
+    to_email = request.session['email']
+    subject, from_email = 'E-ticket', 'contact.glideez@gmail.com'
+    text_content = 'You can download your tickets from file attached below.'
+    html_content = '<p>This is your E-Ticket for upcoming  <strong>Flight</strong>.</p>'
+    msg = EmailMultiAlternatives(subject, text_content, from_email, ['kigat81500@probdd.com'])
+    msg.attach_alternative(html_content, "text/html")
+    msg.attach('ticket.pdf', pdf2, 'application/pdf')
+    msg.send()
 
     return HttpResponse(pdf, content_type='application/pdf')
 
