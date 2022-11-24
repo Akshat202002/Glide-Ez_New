@@ -54,7 +54,7 @@ def contact_view(request):
         Email:\n\t\t{}\n
         Subject:\n\t\t{}\n
         '''.format(form_data['name'], form_data['new_message'], form_data['email'],form_data['subject'])
-        send_mail('You got a mail!', message, '', ['glideezinfo@gmail.com']) # TODO: enter your email address
+        send_mail('You got a mail!', message, '', ['contact.glideez@gmail.com']) # TODO: enter your email address
     return render(request, "glideEz/contact.html")
 
 
