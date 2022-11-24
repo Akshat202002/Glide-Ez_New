@@ -937,10 +937,11 @@ def Ticket_view(request):
     ticket_id = request.POST.get('ref')
     query = """select distinct t.ticket_ID,Flight.Flight_ID,Flight.Flight_Name,Booking.Booking_ID,Trip.Depart_time,Trip.arrival_time,t.ticket_status,
         (select loc from Airport where Airport_ID=t.src_ID) src,(select Airport_Name from Airport where Airport_ID=t.src_ID) src_ap,(select loc from Airport where Airport_ID=t.dest_ID) dest,
-        (select Airport_Name from Airport where Airport_ID=t.dest_ID) dest_ap,Seat.Seat_No,Seat.Class_Type,Passenger.P_Name,Passenger.DOB,Passenger.Phone_No,booking.booking_date,passenger.email
-        from ticket t,Booking,Passenger,Airport,Flight,Seat,Trip where 
+        (select Airport_Name from Airport where Airport_ID=t.dest_ID) dest_ap,Seat.Seat_No,Seat.Class_Type,Passenger.P_Name,Passenger.DOB,Passenger.Phone_No,booking.booking_date,passenger.email,
+        (select Airline_name from airline where airline.airline_Id=flight.fk_airline_id) airline_name,Payment.Payment_amount
+        from ticket t,Booking,Passenger,Airport,Flight,Seat,Trip,Payment where 
         t.booking_ID=Booking.Booking_ID and t.Passenger_ID=Passenger.Passenger_ID and Flight.Flight_ID=trip.flight_id and 
-        Trip.Trip_ID=t.Trip_ID and Seat.Seat_No=t.Seat_No and seat.trip_id=t.trip_id and t.ticket_id= {};""".format(ticket_id)
+        Trip.Trip_ID=t.Trip_ID and Seat.Seat_No=t.Seat_No and seat.trip_id=t.trip_id and Payment.Payment_Id = Booking.Payment_Id and t.ticket_id= {};""".format(ticket_id)
     mycursor.execute(query)
     ticket=mycursor.fetchall()
     
@@ -987,13 +988,13 @@ def passenger_view(request):
 
         return render(request, 'glideEz/Passenger.html',{'price': total_price,'seat_list':seat_list,'trip_id':trip_id})
 
-@csrf_exempt
-def get_ticket(request):
-    ref = request.GET.get("ref")
-    ticket1 = Ticket.objects.get(ref_no=ref)
-    data = {
-        'ticket1':ticket1,
-        'current_year': datetime.now().year
-    }
-    pdf = render_to_pdf('flight/ticket.html', data)
-    return HttpResponse(pdf, content_type='application/pdf')
+# @csrf_exempt
+# def get_ticket(request):
+#     ref = request.GET.get("ref")
+#     ticket1 = Ticket.objects.get(ref_no=ref)
+#     data = {
+#         'ticket1':ticket1,
+#         'current_year': datetime.now().year
+#     }
+#     pdf = render_to_pdf('flight/ticket.html', data)
+#     return HttpResponse(pdf, content_type='application/pdf')
