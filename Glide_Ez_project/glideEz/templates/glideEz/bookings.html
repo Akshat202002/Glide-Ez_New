@@ -99,8 +99,8 @@
                         </div>
                     </div>
                 </summary>
+                {% if booking.4 == 1 %}
                 <p>
-                    {% if booking.4 == 1 %}
                     {%for ticket in tickets|get_item:booking.0 %}
                     <div class="ticket-details" style="align-content: center;">
                         <div class="row ticket-details-div">
@@ -141,8 +141,8 @@
                         </div>
                     </div>
                     {%endfor%}
-                    {%endif%}
                 </p>
+                {%endif%}
             </details>
 
         </div>
