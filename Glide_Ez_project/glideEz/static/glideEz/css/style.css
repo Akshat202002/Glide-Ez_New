@@ -68,6 +68,12 @@
   color: rgb(255, 255, 255);
 }
 
+.gtco-nav ul li a:hover {
+
+  color: #fff;
+  text-decoration: none;
+}
+
 .gtco-nav ul li.has-dropdown {
   position: relative;
 }
@@ -2769,6 +2775,11 @@ form .button input {
 form .button input:hover {
 
   background: linear-gradient(135deg, #101735, #101735);
+}
+
+.gtco-nav a:hover {
+  color: grey !important;
+  text-decoration: none !important;
 }
 
 /*# sourceMappingURL=style.css.map */
