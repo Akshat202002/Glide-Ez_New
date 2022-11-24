@@ -10,7 +10,7 @@ import sweetify
 from django.template.defaulttags import register
 import json
 from django.views.decorators.csrf import csrf_exempt
-
+from django.core.mail import EmailMultiAlternatives
 from Glide_Ez_project.utils import render_to_pdf
 
 # Create your views here.
@@ -944,6 +944,7 @@ def Ticket_view(request):
     
     # return render(request,'glideEz/ticket.html',{'ticket':ticket[0]})
     pdf = render_to_pdf('glideEz/ticket.html', {'ticket':ticket[0]})
+
     return HttpResponse(pdf, content_type='application/pdf')
 
 def passenger_view(request):
