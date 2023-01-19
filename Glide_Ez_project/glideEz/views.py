@@ -792,7 +792,7 @@ def airline_addflight_view(request):
             sweetify.error(request, 'Flight ID already exists', text='Try another flight id', persistent='Try Again')
             return redirect('/airline_addFlight')
         else:
-            str="""insert into Flight(Flight_ID,fk_Airline_ID,Flight_Name,First_Class,Business_Class,Economy_Class) values({},'{}','{}',{},{},{})""".format(Flight_ID,airline_id,Flight_Name,First,Business,Economy)
+            str="""insert into Flight(Flight_ID,fk_Airline_ID,Flight_Name,First_Class,Business,Economy) values({},'{}','{}',{},{},{})""".format(Flight_ID,airline_id,Flight_Name,First,Business,Economy)
             mycursor.execute(str)
             mydb.commit()
             sweetify.success(request, 'Flight Added', text='Flight Added Successfully', persistent='Add Trip')
@@ -842,7 +842,7 @@ def addtrip_form_view(request):
     mydb = mysql.connector.connect(
         host="localhost",
         user="root",
-        password="",
+        password="2002",
         database="glide_ez"
     )
     mycursor=mydb.cursor()
