@@ -12,6 +12,7 @@ function searchvalidate() {
   mm = String(Number(mm) + 1);
   var yyyy = today.getFullYear();
   today = mm + '/' + dd + '/' + yyyy;
+  Logger.log(today);
 
   if (src == "") {
     alert("Source value must be filled out");
